@@ -12,7 +12,7 @@ import AddSubdistrict from "./AddSubdistrict";
 
 const db = getDatabase(app);
 const DataSubdistrict = () => {
-  const [dataSubdistrict, setDataSubsdistrict] = useState([]);
+  const [dataSubdistrict, setDataSubdistrict] = useState([]);
   const [selectedSubdistrict, setSelectedSubdistrict] = useState({});
   const [openAddSubdistrict, setOpenAddSubsdistrict] = useState(false);
   const [openDeleteSubdistrict, setOpenDeleteSubdistrict] = useState(false);
@@ -31,8 +31,20 @@ const DataSubdistrict = () => {
           value,
         });
       });
-      setDataSubsdistrict(data);
-      console.log(dataSubdistrict);
+
+      data.sort((a, b) => {
+        const subdistrictA = a.value.subdistrict.toLowerCase();
+        const subdistrictB = b.value.subdistrict.toLowerCase();
+        if (subdistrictA < subdistrictB) {
+          return -1;
+        }
+        if (subdistrictA > subdistrictB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setDataSubdistrict(data);
     });
   };
 

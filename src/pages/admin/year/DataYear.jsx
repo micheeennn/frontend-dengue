@@ -5,6 +5,7 @@ import {
   AiOutlineDelete,
   AiOutlineEdit,
 } from "react-icons/ai";
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { app } from "../../../config";
 import AddYear from "./AddYear";
 import DeleteYear from "./DeleteYear";
@@ -17,20 +18,34 @@ const DataYear = () => {
   const [openAddYear, setOpenAddYear] = useState(false);
   const [openDeleteYear, setOpenDeleteYear] = useState(false);
   const [openEditYear, setOpenEditYear] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(11); // Number of items to show per page
+  const [yearly, setYearly] = useState(0);
 
   const fetchData = () => {
-    const criteriaRef = ref(db, "year");
+    const criteriaRef = ref(db, "data");
     onValue(criteriaRef, (snapshot) => {
       const data = [];
+      const yearly = [];
+
       snapshot.forEach((childSnapshot) => {
         const key = childSnapshot.key;
         const value = childSnapshot.val();
 
-        data.push({
-          key,
-          value,
-        });
+        if (key === "year") {
+          for (const year in value) {
+            const yearData = value[year];
+            yearly.push(year);
+            for (const attribute in yearData) {
+              for (const district in yearData[attribute]) {
+                const value = yearData[attribute][district];
+                data.push({ attribute, district, value, year });
+              }
+            }
+          }
+        }
       });
+      setYearly(yearly);
       setDataYear(data);
     });
   };
@@ -48,9 +63,24 @@ const DataYear = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Get current items based on pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dataYear.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
   return (
     <>
-      <div className="flex justify-end items-center">
+      <div className="flex items-center justify-end">
         <button className="btn" onClick={() => setOpenAddYear(true)}>
           <AiOutlinePlusCircle className="icon" />
         </button>
@@ -61,43 +91,74 @@ const DataYear = () => {
         </>
       ) : (
         <>
-          <div className="overflow-x-auto shadow-md mt-4">
-            <table className="table ">
+          <div className="mt-4 overflow-x-auto shadow-md">
+            <table className="table">
               {/* head */}
               <thead>
                 <tr className="text-center">
                   <th></th>
+                  <th>Atribut</th>
+                  <th>Distrik</th>
+                  <th>Nilai</th>
                   <th>Tahun</th>
-                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                {dataYear.map((item, index) => (
+                {currentItems.map((item, index) => (
                   <tr key={index + 1}>
                     <td>{index + 1}</td>
-                    <td className="text-center">{item.value.year}</td>
-                    <td className="flex justify-center items-center space-x-4">
+                    <td className="text-center">
+                      {item.attribute === "airHumidity"
+                        ? "Kelembapan Air"
+                        : null}
+                      {item.attribute === "cases" ? "Jumlah Kasus" : null}
+                      {item.attribute === "rainfall" ? "Curah Hujan" : null}
+                    </td>
+                    <td className="text-center">{item.district}</td>
+                    <td className="text-center">{item.value}</td>
+                    <td className="text-center">{item.year}</td>
+                    {/* <td className="flex items-center justify-center space-x-4">
                       <button
                         onClick={() => fetchSelectedDelete(item)}
-                        className="bg-red-600 text-white p-2 rounded-md"
+                        className="p-2 text-white bg-red-600 rounded-md"
                       >
                         <AiOutlineDelete size={20} />
                       </button>
                       <button
                         onClick={() => fetchSelectedEdit(item)}
-                        className="bg-green-600 text-white p-2 rounded-md"
+                        className="p-2 text-white bg-green-600 rounded-md"
                       >
                         <AiOutlineEdit size={20} />
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <div className="flex justify-center mt-4">
+            {currentPage > 1 && (
+              <button
+                onClick={handlePrevPage}
+                className="mr-2 btn btn-sm btn-primary"
+              >
+                <MdKeyboardArrowLeft />
+              </button>
+            )}
+            {dataYear.length > itemsPerPage * currentPage && (
+              <button
+                onClick={handleNextPage}
+                className="btn btn-primary btn-sm"
+              >
+                <MdKeyboardArrowRight />
+              </button>
+            )}
+          </div>
         </>
       )}
-      {openAddYear && <AddYear setOpenAddYear={setOpenAddYear} />}
+      {openAddYear && (
+        <AddYear yearly={yearly} setOpenAddYear={setOpenAddYear} />
+      )}
       {openDeleteYear && (
         <DeleteYear
           selectedYear={selectedYear}

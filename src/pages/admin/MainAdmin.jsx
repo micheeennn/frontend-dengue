@@ -4,11 +4,7 @@ import Header from "../../components/Header";
 import { MdDescription } from "react-icons/md";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { FiFolder, FiLogOut } from "react-icons/fi";
-import AddSubdistrict from "./subdistrict/AddSubdistrict";
-import DataRainfall from "./rainfall/DataRainfall";
 import DataYear from "./year/DataYear";
-import DataCase from "./case/DataCase";
-import DataAirHumidity from "./airhumidity/DataAirHumidity";
 import { AiFillCalendar, AiFillPieChart } from "react-icons/ai";
 import DataSubdistrict from "./subdistrict/DataSubdistrict";
 
@@ -24,24 +20,9 @@ const MainAdmin = () => {
       icon: FiFolder,
     },
     {
-      name: "Data Tahun",
+      name: "Data Tahunan",
       link: "/pages/year",
       icon: AiFillCalendar,
-    },
-    {
-      name: "Data Jumlah Kasus",
-      link: "/pages/case",
-      icon: AiFillPieChart,
-    },
-    {
-      name: "Kelembapan Air",
-      link: "/pages/air-humidity",
-      icon: MdDescription,
-    },
-    {
-      name: "Curah Hujan",
-      link: "/pages/rainfall",
-      icon: FiFolder,
     },
   ];
 
@@ -131,11 +112,8 @@ const MainAdmin = () => {
         </div>
         <div className="p-5">
           <Routes>
-            <Route path="/subdistrict" element={<DataSubdistrict />} />
-            <Route path="/rainfall" element={<DataRainfall />} />
+            <Route path="/subdistrict" element={<DataSubdistrict />} />\
             <Route path="/year" element={<DataYear />} />
-            <Route path="/case" element={<DataCase />} />
-            <Route path="/air-humidity" element={<DataAirHumidity />} />
           </Routes>
         </div>
       </div>

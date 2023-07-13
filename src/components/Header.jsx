@@ -7,9 +7,7 @@ const Header = () => {
         className="flex items-center justify-center h-20 px-10"
         style={{ boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px" }}
       >
-        <h1 className="text-center">
-          SISTEM PENDUKUNG KEPUTUSAN PEMBELIAN KAMERA MENGGUNAKAN METODE TOPSIS
-        </h1>
+        <h1 className="text-center"></h1>
       </div>
     </>
   );

@@ -1,29 +1,124 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { app } from "../../../config";
 import { uid } from "uid";
-import { set, ref, getDatabase } from "firebase/database";
+import { set, ref, getDatabase, onValue } from "firebase/database";
+import ToastError from "../../../components/toast/ToastError";
 
 const db = getDatabase(app);
-const AddYear = ({ setOpenAddYear }) => {
+const AddYear = ({ setOpenAddYear, yearly }) => {
   const [year, setYear] = useState(0);
+  const [dataSubdistrict, setDataSubdistrict] = useState([]);
+  const [errorYear, setErrorYear] = useState(false);
+  const [openToast, setOpenToast] = useState(false);
+  const [cases, setCases] = useState({
+    Bunaken: 1,
+    "Bunaken Kepulauan": 0,
+    Malalayang: 0,
+    Mapanget: 0,
+    "Paal 2": 0,
+    Sario: 0,
+    Singkil: 0,
+    Tikala: 0,
+    Tuminting: 0,
+    Wanea: 0,
+    Wenang: 0,
+  });
+  const [airHumidity, setAirHumidity] = useState({
+    Bunaken: 0,
+    "Bunaken Kepulauan": 0,
+    Malalayang: 0,
+    Mapanget: 0,
+    "Paal 2": 0,
+    Sario: 0,
+    Singkil: 0,
+    Tikala: 0,
+    Tuminting: 0,
+    Wanea: 0,
+    Wenang: 0,
+  });
+  const [rainfall, setRainfall] = useState({
+    Bunaken: 0,
+    "Bunaken Kepulauan": 0,
+    Malalayang: 0,
+    Mapanget: 0,
+    "Paal 2": 0,
+    Sario: 0,
+    Singkil: 0,
+    Tikala: 0,
+    Tuminting: 0,
+    Wanea: 0,
+    Wenang: 0,
+  });
+
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+    if (!yearly.includes(selectedYear)) {
+      setErrorYear(false);
+    } else {
+      setErrorYear(true);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const uuid = uid();
-    set(ref(db, `/year/${uuid}`), {
-      uuid,
-      year,
-    });
-    close();
-    setYear(0);
+    if (errorYear) {
+      setOpenToast(true);
+      setTimeout(() => {
+        setOpenToast(false);
+      }, 2000);
+    } else {
+      set(ref(db, `/data/year/${year}`), {
+        cases,
+        rainfall,
+        airHumidity,
+      });
+      close();
+      setYear(0);
+    }
   };
 
   const close = () => {
     setOpenAddYear(false);
   };
+
+  const fetchData = () => {
+    const criteriaRef = ref(db, "subdistrict");
+    onValue(criteriaRef, (snapshot) => {
+      const data = [];
+      snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        const value = childSnapshot.val();
+
+        data.push({
+          key,
+          value,
+        });
+      });
+
+      data.sort((a, b) => {
+        const subdistrictA = a.value.subdistrict.toLowerCase();
+        const subdistrictB = b.value.subdistrict.toLowerCase();
+        if (subdistrictA < subdistrictB) {
+          return -1;
+        }
+        if (subdistrictA > subdistrictB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setDataSubdistrict(data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex h-screen items-center justify-center">
+      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-screen">
         <div
           id="popup-modal"
           tabIndex="-1"
@@ -54,8 +149,8 @@ const AddYear = ({ setOpenAddYear }) => {
             </button>
             <div className="p-6 text-center">
               <form onSubmit={handleSubmit}>
-                <div>
-                  <label htmlFor="subdistrict" className="label">
+                <div className="flex flex-col items-center justify-center my-4 space-y-4">
+                  <label htmlFor="subdistrict" className="text-left label">
                     Tahun
                   </label>
                   <input
@@ -63,13 +158,107 @@ const AddYear = ({ setOpenAddYear }) => {
                     name="subdistrict"
                     id="subdistrict"
                     value={year}
-                    className="input input-md input-bordered w-full max-w-xs"
-                    onChange={(e) => setYear(e.target.value)}
+                    className="w-full max-w-xs input input-md input-bordered"
+                    onChange={handleYearChange}
                   />
+                  {errorYear && (
+                    <p className="text-left text-red-600">
+                      Data Tahun Sudah ada
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <h4 className="text-left">Kasus</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      {Object.entries(cases).map(([subdistrict, value]) => (
+                        <div key={subdistrict}>
+                          <label
+                            htmlFor={`cases-${subdistrict}`}
+                            className="label"
+                          >
+                            {subdistrict}
+                          </label>
+                          <input
+                            type="number"
+                            name={`cases-${subdistrict}`}
+                            id={`cases-${subdistrict}`}
+                            value={value}
+                            className="w-full max-w-xs input input-md input-bordered"
+                            onChange={(e) =>
+                              setCases({
+                                ...cases,
+                                [subdistrict]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-left">Curah Hujan</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      {Object.entries(rainfall).map(([subdistrict, value]) => (
+                        <div key={subdistrict}>
+                          <label
+                            htmlFor={`rainfall-${subdistrict}`}
+                            className="label"
+                          >
+                            {subdistrict}
+                          </label>
+                          <input
+                            type="number"
+                            name={`rainfall-${subdistrict}`}
+                            id={`rainfall-${subdistrict}`}
+                            value={value}
+                            className="w-full max-w-xs input input-md input-bordered"
+                            onChange={(e) =>
+                              setRainfall({
+                                ...rainfall,
+                                [subdistrict]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-left">Kelembapan</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      {Object.entries(airHumidity).map(
+                        ([subdistrict, value]) => (
+                          <div key={subdistrict}>
+                            <label
+                              htmlFor={`airHumidity-${subdistrict}`}
+                              className="label"
+                            >
+                              {subdistrict}
+                            </label>
+                            <input
+                              type="number"
+                              name={`airHumidity-${subdistrict}`}
+                              id={`airHumidity-${subdistrict}`}
+                              value={value}
+                              className="w-full max-w-xs input input-md input-bordered"
+                              onChange={(e) =>
+                                setAirHumidity({
+                                  ...airHumidity,
+                                  [subdistrict]: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary btn-md w-full mt-4"
+                  className="w-full mt-4 btn btn-primary btn-md"
                 >
                   Simpan
                 </button>
@@ -78,6 +267,7 @@ const AddYear = ({ setOpenAddYear }) => {
           </div>
         </div>
       </div>
+      {openToast && <ToastError message="Data tahun sudah ada" />}
     </>
   );
 };
