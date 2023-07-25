@@ -7,6 +7,7 @@ import { FiFolder, FiLogOut } from "react-icons/fi";
 import DataYear from "./year/DataYear";
 import { AiFillCalendar, AiFillPieChart } from "react-icons/ai";
 import DataSubdistrict from "./subdistrict/DataSubdistrict";
+import Calculate from "./calculate/Calculate";
 
 const MainAdmin = () => {
   const [open, setOpen] = useState(true);
@@ -22,6 +23,11 @@ const MainAdmin = () => {
     {
       name: "Data Tahunan",
       link: "/pages/year",
+      icon: AiFillCalendar,
+    },
+    {
+      name: "Perhitungan",
+      link: "/pages/calculate",
       icon: AiFillCalendar,
     },
   ];
@@ -114,6 +120,7 @@ const MainAdmin = () => {
           <Routes>
             <Route path="/subdistrict" element={<DataSubdistrict />} />\
             <Route path="/year" element={<DataYear />} />
+            <Route path="/calculate" element={<Calculate />} />
           </Routes>
         </div>
       </div>

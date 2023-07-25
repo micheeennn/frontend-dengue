@@ -23,19 +23,6 @@ const AddYear = ({ setOpenAddYear, yearly }) => {
     Wanea: 0,
     Wenang: 0,
   });
-  const [airHumidity, setAirHumidity] = useState({
-    Bunaken: 0,
-    "Bunaken Kepulauan": 0,
-    Malalayang: 0,
-    Mapanget: 0,
-    "Paal 2": 0,
-    Sario: 0,
-    Singkil: 0,
-    Tikala: 0,
-    Tuminting: 0,
-    Wanea: 0,
-    Wenang: 0,
-  });
   const [rainfall, setRainfall] = useState({
     Bunaken: 0,
     "Bunaken Kepulauan": 0,
@@ -72,7 +59,6 @@ const AddYear = ({ setOpenAddYear, yearly }) => {
       set(ref(db, `/data/year/${year}`), {
         cases,
         rainfall,
-        airHumidity,
       });
       close();
       setYear(0);
@@ -118,7 +104,10 @@ const AddYear = ({ setOpenAddYear, yearly }) => {
   }, []);
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-screen">
+      <div
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-screen"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+      >
         <div
           id="popup-modal"
           tabIndex="-1"
@@ -168,7 +157,7 @@ const AddYear = ({ setOpenAddYear, yearly }) => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <h4 className="text-left">Kasus</h4>
                     <div className="grid grid-cols-3 gap-4">
@@ -223,36 +212,6 @@ const AddYear = ({ setOpenAddYear, yearly }) => {
                           />
                         </div>
                       ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="text-left">Kelembapan</h4>
-                    <div className="grid grid-cols-3 gap-4">
-                      {Object.entries(airHumidity).map(
-                        ([subdistrict, value]) => (
-                          <div key={subdistrict}>
-                            <label
-                              htmlFor={`airHumidity-${subdistrict}`}
-                              className="label"
-                            >
-                              {subdistrict}
-                            </label>
-                            <input
-                              type="number"
-                              name={`airHumidity-${subdistrict}`}
-                              id={`airHumidity-${subdistrict}`}
-                              value={value}
-                              className="w-full max-w-xs input input-md input-bordered"
-                              onChange={(e) =>
-                                setAirHumidity({
-                                  ...airHumidity,
-                                  [subdistrict]: e.target.value,
-                                })
-                              }
-                            />
-                          </div>
-                        )
-                      )}
                     </div>
                   </div>
                 </div>

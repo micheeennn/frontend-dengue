@@ -14,7 +14,7 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        navigate("/pages/data-criteria");
+        navigate("/pages/subdistrict");
         sessionStorage.setItem(
           "Auth Token",
           userCredential._tokenResponse.refreshToken
@@ -36,7 +36,7 @@ const LoginPage = () => {
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg w-96 rounded-lg">
+      <div className="px-8 py-6 mt-4 text-left bg-white rounded-lg shadow-lg w-96">
         <h3 className="text-2xl font-bold text-center text-first">Masuk</h3>
         <form action="">
           <div className="">
@@ -49,7 +49,7 @@ const LoginPage = () => {
                 id="email"
                 placeholder="admin@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
-                className="input input-bordered w-full max-w-xs"
+                className="w-full max-w-xs input input-bordered"
               />
             </div>
             <div className="mt-4">
@@ -61,13 +61,13 @@ const LoginPage = () => {
                 id="password"
                 placeholder="******"
                 onChange={(e) => setPassword(e.target.value)}
-                className="input input-bordered w-full max-w-xs"
+                className="w-full max-w-xs input input-bordered"
               />
             </div>
             <div className="mt-6">
               <button
                 onClick={handlerLoginSubmit}
-                className="btn btn-primary w-full"
+                className="w-full btn btn-primary"
               >
                 Masuk
               </button>

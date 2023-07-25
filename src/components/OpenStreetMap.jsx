@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { statesData } from "../utils/data";
 
 const OpenStreetMap = () => {
-  const center = [40.63463151377654, -97.89969605983609];
+  const center = [1.5409856, 124.7020854];
 
   return (
     <MapContainer
@@ -24,7 +24,7 @@ const OpenStreetMap = () => {
         return (
           <Polygon
             pathOptions={{
-              fillColor: "#FD8D3C",
+              fillColor: "#FF0000",
               fillOpacity: 0.7,
               weight: 2,
               opacity: 1,
@@ -37,7 +37,7 @@ const OpenStreetMap = () => {
                 const layer = e.target;
                 layer.setStyle({
                   dashArray: "",
-                  fillColor: "#BD0026",
+                  fillColor: "#FFFFFF",
                   fillOpacity: 0.7,
                   weight: 2,
                   opacity: 1,
@@ -51,7 +51,7 @@ const OpenStreetMap = () => {
                   weight: 2,
                   dashArray: "3",
                   color: "white",
-                  fillColor: "#FD8D3C",
+                  fillColor: "#000000",
                 });
               },
               click: (e) => {},
