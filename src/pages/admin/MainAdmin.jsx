@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Route, Routes, NavLink } from "react-router-dom";
 import Header from "../../components/Header";
-import { MdDescription } from "react-icons/md";
-import { HiMenuAlt3 } from "react-icons/hi";
+import { MdOutlineCalculate } from "react-icons/md";
+import { HiMenu, HiOutlineHome } from "react-icons/hi";
 import { FiFolder, FiLogOut } from "react-icons/fi";
 import DataYear from "./year/DataYear";
 import { AiFillCalendar, AiFillPieChart } from "react-icons/ai";
@@ -16,6 +16,11 @@ const MainAdmin = () => {
 
   const menus = [
     {
+      name: "Beranda",
+      link: "/pages/home",
+      icon: HiOutlineHome,
+    },
+    {
       name: "Data Kecamatan",
       link: "/pages/subdistrict",
       icon: FiFolder,
@@ -28,7 +33,7 @@ const MainAdmin = () => {
     {
       name: "Perhitungan",
       link: "/pages/calculate",
-      icon: AiFillCalendar,
+      icon: MdOutlineCalculate,
     },
   ];
 
@@ -53,7 +58,7 @@ const MainAdmin = () => {
         } duration-500 shadow-md text-gray-900 px-4`}
       >
         <div className="flex justify-end py-3">
-          <HiMenuAlt3
+          <HiMenu
             size={26}
             className="cursor-pointer"
             onClick={() => setOpen(!open)}
@@ -67,7 +72,7 @@ const MainAdmin = () => {
                 key={i}
                 className={` ${
                   menu?.margin && "mt-5"
-                } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-red-600 hover:text-white rounded-md`}
+                } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-[#890F0F] hover:text-white rounded-md`}
                 activeClassName="text-[#FF0000]"
               >
                 <div>{React.createElement(menu?.icon, { size: "20" })}</div>
@@ -89,7 +94,7 @@ const MainAdmin = () => {
             ))}
             <button
               onClick={() => setOpenModalLogout(true)}
-              className="group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-red-600 rounded-md"
+              className="group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-[#890F0F] rounded-md"
             >
               <div>
                 <FiLogOut size="20" />

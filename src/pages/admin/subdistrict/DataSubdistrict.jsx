@@ -62,25 +62,20 @@ const DataSubdistrict = () => {
   }, []);
   return (
     <>
-      <div className="flex justify-end items-center">
-        <button className="btn" onClick={() => setOpenAddSubsdistrict(true)}>
-          <AiOutlinePlusCircle className="icon" />
-        </button>
-      </div>
+      <h4 className="text-xl font-bold">Data Kecamatan</h4>
       {dataSubdistrict.length === 0 ? (
         <>
           <p className="text-center">Tidak ada data</p>
         </>
       ) : (
         <>
-          <div className="overflow-x-auto shadow-md mt-4">
+          <div className="mt-4 overflow-x-auto shadow-md">
             <table className="table ">
               {/* head */}
-              <thead>
+              <thead className="bg-[#B66A6A]">
                 <tr className="text-center">
                   <th></th>
-                  <th>Kecamatan</th>
-                  <th>Aksi</th>
+                  <th className="text-base text-black">Kecamatan</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,20 +83,6 @@ const DataSubdistrict = () => {
                   <tr key={index + 1}>
                     <td>{index + 1}</td>
                     <td className="text-center">{item.value.subdistrict}</td>
-                    <td className="flex justify-center items-center space-x-4">
-                      <button
-                        onClick={() => fetchSelectedDelete(item)}
-                        className="bg-red-600 text-white p-2 rounded-md"
-                      >
-                        <AiOutlineDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => fetchSelectedEdit(item)}
-                        className="bg-green-600 text-white p-2 rounded-md"
-                      >
-                        <AiOutlineEdit size={20} />
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

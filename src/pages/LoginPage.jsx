@@ -16,7 +16,7 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        navigate("/pages/subdistrict");
+        navigate("/pages/home");
         sessionStorage.setItem(
           "Auth Token",
           userCredential._tokenResponse.refreshToken
