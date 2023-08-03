@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { app } from "../../../config";
 import { uid } from "uid";
-import { set, ref, getDatabase } from "firebase/database";
-
-const db = getDatabase(app);
+import { set, ref } from "firebase/database";
+import { db } from "../../../config";
 
 const AddSubdistrict = ({ setOpenAddSubdistrict }) => {
   const [subdistrict, setSubdistrict] = useState("");
@@ -24,7 +22,7 @@ const AddSubdistrict = ({ setOpenAddSubdistrict }) => {
     setOpenAddSubdistrict(false);
   };
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex h-screen items-center justify-center">
+    <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-screen">
       <div
         id="popup-modal"
         tabIndex="-1"
@@ -64,13 +62,13 @@ const AddSubdistrict = ({ setOpenAddSubdistrict }) => {
                   name="subdistrict"
                   id="subdistrict"
                   value={subdistrict}
-                  className="input input-md input-bordered w-full max-w-xs"
+                  className="w-full max-w-xs input input-md input-bordered"
                   onChange={(e) => setSubdistrict(e.target.value)}
                 />
               </div>
               <button
                 type="submit"
-                className="btn btn-primary btn-md w-full mt-4"
+                className="w-full mt-4 btn btn-primary btn-md"
               >
                 Simpan
               </button>

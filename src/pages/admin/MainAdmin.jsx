@@ -8,6 +8,7 @@ import DataYear from "./year/DataYear";
 import { AiFillCalendar, AiFillPieChart } from "react-icons/ai";
 import DataSubdistrict from "./subdistrict/DataSubdistrict";
 import Calculate from "./calculate/Calculate";
+import Home from "./home/Home";
 
 const MainAdmin = () => {
   const [open, setOpen] = useState(true);
@@ -123,7 +124,8 @@ const MainAdmin = () => {
         </div>
         <div className="p-5">
           <Routes>
-            <Route path="/subdistrict" element={<DataSubdistrict />} />\
+            <Route path="/home" element={<Home />} />
+            <Route path="/subdistrict" element={<DataSubdistrict />} />
             <Route path="/year" element={<DataYear />} />
             <Route path="/calculate" element={<Calculate />} />
           </Routes>

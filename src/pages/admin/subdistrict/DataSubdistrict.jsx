@@ -9,6 +9,7 @@ import { app } from "../../../config";
 import DeleteSubdistrict from "./DeleteSubdistrict";
 import EditSubdistrict from "./EditSubdistrict";
 import AddSubdistrict from "./AddSubdistrict";
+import { MdDelete } from "react-icons/md";
 
 const db = getDatabase(app);
 const DataSubdistrict = () => {
@@ -48,21 +49,11 @@ const DataSubdistrict = () => {
     });
   };
 
-  const fetchSelectedDelete = (selectedSubdistrict) => {
-    setSelectedSubdistrict(selectedSubdistrict);
-    setOpenDeleteSubdistrict(true);
-  };
-
-  const fetchSelectedEdit = (selectedSubdistrict) => {
-    setSelectedSubdistrict(selectedSubdistrict);
-    setOpenEditSubdistrict(true);
-  };
   useEffect(() => {
     fetchData();
   }, []);
   return (
     <>
-      <h4 className="text-xl font-bold">Data Kecamatan</h4>
       {dataSubdistrict.length === 0 ? (
         <>
           <p className="text-center">Tidak ada data</p>
@@ -71,11 +62,10 @@ const DataSubdistrict = () => {
         <>
           <div className="mt-4 overflow-x-auto shadow-md">
             <table className="table ">
-              {/* head */}
-              <thead className="bg-[#B66A6A]">
-                <tr className="text-center">
+              <thead>
+                <tr className="text-lg text-center text-black">
                   <th></th>
-                  <th className="text-base text-black">Kecamatan</th>
+                  <th>Kecamatan</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,21 +79,6 @@ const DataSubdistrict = () => {
             </table>
           </div>
         </>
-      )}
-      {openAddSubdistrict && (
-        <AddSubdistrict setOpenAddSubdistrict={setOpenAddSubsdistrict} />
-      )}
-      {openDeleteSubdistrict && (
-        <DeleteSubdistrict
-          selectedSubdistrict={selectedSubdistrict}
-          setOpenDeleteSubdistrict={setOpenDeleteSubdistrict}
-        />
-      )}
-      {openEditSubdistrict && (
-        <EditSubdistrict
-          selectedSubdistrict={selectedSubdistrict}
-          setOpenEditSubdistrict={setOpenEditSubdistrict}
-        />
       )}
     </>
   );

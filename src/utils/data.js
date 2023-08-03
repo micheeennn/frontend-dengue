@@ -4,7 +4,7 @@ export const statesData = {
     //Bunaken
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "01",
       properties: { name: "Bunaken" },
       geometry: {
         type: "Polygon",
@@ -54,7 +54,6 @@ export const statesData = {
             [124.8029135386263, 1.5679966546350528],
             [124.80737912138977, 1.5768224250706828],
             [124.82059724667266, 1.5840411635341118],
-            [124.82072683006665, 1.5839677002353993], // Closing point
           ],
         ],
       },
@@ -62,7 +61,7 @@ export const statesData = {
     //Kepulauan Bunaken
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "02", // Assuming a unique ID for Bunaken
       properties: { name: "Kepulauan Bunaken" },
       geometry: {
         type: "MultiPolygon",
@@ -218,8 +217,8 @@ export const statesData = {
     //Malalayang
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
-      properties: { name: "Malalayan" },
+      id: "03", // Assuming a unique ID for Bunaken
+      properties: { name: "Malalayang" },
       geometry: {
         type: "Polygon",
         coordinates: [
@@ -276,7 +275,7 @@ export const statesData = {
     //Mapanget
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "04", // Assuming a unique ID for Bunaken
       properties: { name: "Mapanget" },
       geometry: {
         type: "Polygon",
@@ -468,7 +467,7 @@ export const statesData = {
     //Paal 2
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "05", // Assuming a unique ID for Bunaken
       properties: { name: "Paal 2" },
       geometry: {
         type: "Polygon",
@@ -700,7 +699,7 @@ export const statesData = {
     //Sario
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "06", // Assuming a unique ID for Bunaken
       properties: { name: "Sario" },
       geometry: {
         type: "Polygon",
@@ -803,7 +802,7 @@ export const statesData = {
     //Singkil
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "07", // Assuming a unique ID for Bunaken
       properties: { name: "Singkil" },
       geometry: {
         type: "Polygon",
@@ -891,7 +890,7 @@ export const statesData = {
     //Tikala
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "08", // Assuming a unique ID for Bunaken
       properties: { name: "Tikala" },
       geometry: {
         type: "Polygon",
@@ -1193,7 +1192,7 @@ export const statesData = {
     //Tuminting
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "09", // Assuming a unique ID for Bunaken
       properties: { name: "Tuminting" },
       geometry: {
         type: "Polygon",
@@ -1313,7 +1312,7 @@ export const statesData = {
     //Wanea
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "10", // Assuming a unique ID for Bunaken
       properties: { name: "Wanea" },
       geometry: {
         type: "Polygon",
@@ -1459,7 +1458,7 @@ export const statesData = {
     //Wenang
     {
       type: "Feature",
-      id: "01", // Assuming a unique ID for Bunaken
+      id: "11", // Assuming a unique ID for Bunaken
       properties: { name: "Wenang" },
       geometry: {
         type: "Polygon",
