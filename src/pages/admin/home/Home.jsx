@@ -50,7 +50,7 @@ const labels = [
 
 const Home = () => {
   const [dataYearly, setDataYearly] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(2020);
+  const [selectedYear, setSelectedYear] = useState(dataYearly[0]);
   const [yearly, setYearly] = useState([]);
   const [cases, setCases] = useState([]);
   const [totalCases, setTotalCases] = useState(0);
@@ -66,33 +66,53 @@ const Home = () => {
     ],
   };
   const fetchDataYear = (selectedYear) => {
-    const Ref = ref(db, "yearly");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      const years = Object.keys(data);
-      setYearly(years);
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setDataYearly(yearData);
-        // Calculate the total cases for the selected year
-        const totalCase = yearData.reduce((acc, item) => {
-          return acc + parseInt(item.cases);
-        }, 0);
+    try {
+      const Ref = ref(db, "yearly");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          // Handle the case where the data is null or not available.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available.");
+          return;
+        }
 
-        setTotalCases(totalCase);
+        const years = Object.keys(data);
+        setYearly(years);
 
-        // Create an array to store the cases
-        const casesArray = [];
+        if (selectedYear && data[selectedYear] && data[selectedYear].data) {
+          const yearData = data[selectedYear].data;
+          setDataYearly(yearData);
 
-        // Push the "cases" data to the array
-        yearData.forEach((item) => {
-          casesArray.push(parseInt(item.cases));
-        });
+          // Calculate the total cases for the selected year
+          const totalCase = yearData.reduce((acc, item) => {
+            return acc + parseInt(item.cases);
+          }, 0);
 
-        setCases(casesArray);
-      }
-    });
-    console.log(dataYearly);
+          setTotalCases(totalCase);
+
+          // Create an array to store the cases
+          const casesArray = [];
+
+          // Push the "cases" data to the array
+          yearData.forEach((item) => {
+            casesArray.push(parseInt(item.cases));
+          });
+
+          setCases(casesArray);
+        } else {
+          // Handle the case where the data for the selected year is missing or not in the expected format.
+          // For example, you might set default values for yearly data, total cases, and cases array.
+          setDataYearly([]);
+          setTotalCases(0);
+          setCases([]);
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      // Handle any potential errors that might occur during data retrieval.
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {

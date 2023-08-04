@@ -15,87 +15,25 @@ import { db } from "../../../config";
 import { uid } from "uid";
 
 const DataYear = () => {
+  // State variables
   const [dataYear, setDataYear] = useState([]);
   const [dataCluster, setDataCluster] = useState([]);
   const [combinedData, setCombinedData] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(2020);
   const [openAddYear, setOpenAddYear] = useState(false);
   const [openDeleteYear, setOpenDeleteYear] = useState(false);
   const [openEditYear, setOpenEditYear] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(11);
   const [yearly, setYearly] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
   const [data, setData] = useState([]);
   const [year, setYear] = useState("");
   const [dataTerm, setDataTerm] = useState([]);
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchDataYear();
   }, []);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataYear.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Change page
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const handleCluster = (data) => {
-    set(ref(db, `/cluster/${year}`), {
-      data,
-    });
-  };
-
-  const handleYearly = (data) => {
-    set(ref(db, `/yearly/${year}`), {
-      data,
-    });
-  };
-  const pushData = (item) => {
-    setDataTerm([...dataTerm, item]);
-  };
-
-  const clustering = async () => {
-    try {
-      const response = await axios.post("http://127.0.0.1:5000/cluster", {
-        data: normalizeData(dataTerm),
-      });
-      handleYearly(dataTerm);
-      handleCluster(response.data.kecamatan_cluster);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchDataYear = (selectedYear) => {
-    const Ref = ref(db, "yearly");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      const years = Object.keys(data);
-      setYearly(years);
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setData(yearData);
-      }
-    });
-  };
-
-  const fetchDataCluster = (selectedYear) => {
-    const Ref = ref(db, "cluster");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setDataCluster(yearData);
-      }
-    });
-  };
 
   useEffect(() => {
     // Fetch initial data
@@ -108,6 +46,98 @@ const DataYear = () => {
     combineData();
   }, [selectedYear]);
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dataYear.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  // Data handling functions
+  const handleCluster = (data) => {
+    set(ref(db, `/cluster/${year}`), {
+      data,
+    });
+  };
+
+  const handleYearly = (data) => {
+    set(ref(db, `/yearly/${year}`), {
+      data,
+    });
+  };
+
+  const pushData = (item) => {
+    setDataTerm([...dataTerm, item]);
+  };
+
+  const clustering = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/cluster", {
+        data: normalizeData(dataTerm),
+      });
+      handleYearly(dataTerm);
+      handleCluster(response.data.kecamatan_cluster);
+      setData([]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Data fetching functions
+  const fetchDataYear = () => {
+    try {
+      const Ref = ref(db, "yearly");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          console.log("Data not available.");
+          return;
+        }
+
+        const years = Object.keys(data);
+        setYearly(years);
+
+        if (selectedYear && data[selectedYear] && data[selectedYear].data) {
+          const yearData = data[selectedYear].data;
+          setData(yearData);
+        } else {
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchDataCluster = () => {
+    try {
+      const Ref = ref(db, "cluster");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (
+          data &&
+          selectedYear &&
+          data[selectedYear] &&
+          data[selectedYear].data
+        ) {
+          const yearData = data[selectedYear].data;
+          setDataCluster(yearData);
+        } else {
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Combine Data
   const combineData = () => {
     const newData = dataCluster.map((clusterData) => {
       const matchingDistrictData = data.find(
@@ -130,7 +160,6 @@ const DataYear = () => {
     console.log(newData);
     setCombinedData(newData);
   };
-  useEffect(() => {}, []);
   return (
     <>
       {!openAddYear && (
@@ -185,7 +214,7 @@ const DataYear = () => {
                         <td>{item?.Values[0]}</td>
                         <td>{item?.Values[1]}</td>
                         <td>{item?.Values[2]}</td>
-                        <td>0</td>
+                        <td>{item?.Cluster}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -246,8 +275,7 @@ const DataYear = () => {
                     <th>Kecamatan</th>
                     <th>Jumlah Kasus</th>
                     <th>Curah Hujan</th>
-                    <th>Kepadatan Penduduk</th>
-                    <th>Aksi</th>
+                    <th>Kepadatan Penduduk</th>\
                   </tr>
                 </thead>
                 <tbody>
@@ -258,11 +286,6 @@ const DataYear = () => {
                       <td className="text-center">{item?.cases}</td>
                       <td className="text-center">{item?.rainfall}</td>
                       <td className="text-center">{item?.population}</td>
-                      <td className="flex justify-center">
-                        <button className="p-1 text-white bg-red-600 btn">
-                          <AiOutlineDelete size={25} />
-                        </button>
-                      </td>
                     </tr>
                   ))}
                 </tbody>

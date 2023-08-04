@@ -14,16 +14,33 @@ const Calculate = () => {
   const [result, setResult] = useState(null);
 
   const fetchData = (selectedYear) => {
-    const Ref = ref(db, "yearly");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      const years = Object.keys(data);
-      setYearly(years);
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setData(yearData);
-      }
-    });
+    try {
+      const Ref = ref(db, "yearly");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          // Handle the case where the data is null or not available.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available.");
+          return;
+        }
+
+        const years = Object.keys(data);
+        setYearly(years);
+
+        if (selectedYear && data[selectedYear] && data[selectedYear].data) {
+          const yearData = data[selectedYear].data;
+          setData(yearData);
+        } else {
+          // Handle the case where the data for the selected year is missing or not in the expected format.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      // Handle any potential errors that might occur during data retrieval.
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -175,16 +192,18 @@ const Calculate = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {result?.initial_cluster_centers.map((center, index) => (
-                      <tr key={index}>
-                        <td className="px-4 py-2 border">
-                          Kluster {index + 1}
-                        </td>
-                        <td className="px-4 py-2 border">
-                          [{center[0]}, {center[1]}]
-                        </td>
-                      </tr>
-                    ))}
+                    <tr>
+                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">[0, 0, 0]</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">[0.5, 0.5, 0.5]</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">[1, 1, 1]</td>
+                    </tr>
                   </tbody>
                 </table>
 

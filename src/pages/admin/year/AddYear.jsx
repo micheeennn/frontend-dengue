@@ -17,39 +17,48 @@ const AddYear = ({ setOpenAddYear, pushData }) => {
   const [id, setId] = useState(0);
 
   const fetchData = () => {
-    const criteriaRef = ref(db, "subdistrict");
-    onValue(criteriaRef, (snapshot) => {
-      const data = [];
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        const value = childSnapshot.val();
+    try {
+      const criteriaRef = ref(db, "subdistrict");
+      onValue(criteriaRef, (snapshot) => {
+        const data = [];
+        snapshot.forEach((childSnapshot) => {
+          const key = childSnapshot.key;
+          const value = childSnapshot.val();
 
-        data.push({
-          key,
-          value,
+          data.push({
+            key,
+            value,
+          });
         });
-      });
 
-      data.sort((a, b) => {
-        const subdistrictA = a.value.subdistrict.toLowerCase();
-        const subdistrictB = b.value.subdistrict.toLowerCase();
-        if (subdistrictA < subdistrictB) {
-          return -1;
-        }
-        if (subdistrictA > subdistrictB) {
-          return 1;
-        }
-        return 0;
-      });
+        data.sort((a, b) => {
+          const subdistrictA = a.value.subdistrict.toLowerCase();
+          const subdistrictB = b.value.subdistrict.toLowerCase();
+          if (subdistrictA < subdistrictB) {
+            return -1;
+          }
+          if (subdistrictA > subdistrictB) {
+            return 1;
+          }
+          return 0;
+        });
 
-      setDataDistrict(data);
-      if (data.length > 0) {
-        setItem((prevItem) => ({
-          ...prevItem,
-          district: data[0].value.subdistrict,
-        }));
-      }
-    });
+        setDataDistrict(data);
+        if (data.length > 0) {
+          setItem((prevItem) => ({
+            ...prevItem,
+            district: data[0].value.subdistrict,
+          }));
+        } else {
+          // Handle the case where the data is empty or not available.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available.");
+        }
+      });
+    } catch (error) {
+      // Handle any potential errors that might occur during data retrieval.
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleChange = (e) => {
@@ -65,6 +74,11 @@ const AddYear = ({ setOpenAddYear, pushData }) => {
     pushData(item);
     setId((prevId) => prevId + 1);
     setItem((prevItem) => ({ ...prevItem, id }));
+    setItem({
+      cases: 0,
+      rainfall: 0,
+      population: 0,
+    });
   };
 
   useEffect(() => {
