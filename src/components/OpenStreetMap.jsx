@@ -22,8 +22,8 @@ const OpenStreetMap = ({ dataCluster }) => {
   ];
 
   useEffect(() => {
-    combineDataAndUpdateStatesData(cluster);
-  }, []);
+    combineDataAndUpdateStatesData(dataCluster);
+  }, [dataCluster]);
   const combineDataAndUpdateStatesData = (dataArray) => {
     // Assuming initialStatesData is available
 

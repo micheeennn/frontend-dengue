@@ -10,37 +10,109 @@ const MainUser = () => {
   const [yearly, setYearly] = useState([]);
   const [dataCluster, setDataCluster] = useState([]);
   const [totalCases, setTotalCases] = useState(0);
+  const [clusterCounts, setClusterCounts] = useState({
+    cluster0Count: 0,
+    cluster1Count: 0,
+    cluster2Count: 0,
+  });
+
+  useEffect(() => {
+    const calculateClusterCounts = () => {
+      let cluster0Count = 0;
+      let cluster1Count = 0;
+      let cluster2Count = 0;
+
+      dataCluster.forEach((item) => {
+        switch (item.Cluster) {
+          case 0:
+            cluster0Count++;
+            break;
+          case 1:
+            cluster1Count++;
+            break;
+          case 2:
+            cluster2Count++;
+            break;
+          default:
+            break;
+        }
+      });
+
+      setClusterCounts({ cluster0Count, cluster1Count, cluster2Count });
+    };
+
+    calculateClusterCounts();
+  }, [dataCluster]);
+
+  const { cluster0Count, cluster1Count, cluster2Count } = clusterCounts;
 
   const fetchDataYear = (selectedYear) => {
-    const Ref = ref(db, "yearly");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      const years = Object.keys(data);
-      setYearly(years);
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setDataYearly(yearData);
-        // Calculate the total cases for the selected year
-        const totalCase = yearData.reduce((acc, item) => {
-          return acc + parseInt(item.cases);
-        }, 0);
+    try {
+      const Ref = ref(db, "yearly");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          // Handle the case where the data is null or not available.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available.");
+          return;
+        }
 
-        setTotalCases(totalCase);
-      }
-    });
-    console.log(dataYearly);
+        const years = Object.keys(data);
+        setYearly(years);
+
+        if (selectedYear && data[selectedYear] && data[selectedYear].data) {
+          const yearData = data[selectedYear].data;
+          setDataYearly(yearData);
+
+          // Calculate the total cases for the selected year
+          const totalCase = yearData.reduce((acc, item) => {
+            return acc + parseInt(item.cases);
+          }, 0);
+
+          setTotalCases(totalCase);
+        } else {
+          // Handle the case where the data for the selected year is missing or not in the expected format.
+          // For example, you might set default values for yearly data and total cases.
+          setDataYearly([]);
+          setTotalCases(0);
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      // Handle any potential errors that might occur during data retrieval.
+      console.error("Error fetching data:", error);
+    }
   };
 
   const fetchDataCluster = (selectedYear) => {
-    const Ref = ref(db, "cluster");
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      if (selectedYear && data[selectedYear] && data[selectedYear].data) {
-        const yearData = data[selectedYear].data;
-        setDataCluster(yearData);
-      }
-    });
+    try {
+      const Ref = ref(db, "cluster");
+      onValue(Ref, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          // Handle the case where the data is null or not available.
+          // For example, you might set a default value or display an error message.
+          console.log("Data not available.");
+          return;
+        }
 
+        if (selectedYear && data[selectedYear] && data[selectedYear].data) {
+          const yearData = data[selectedYear].data;
+          setDataCluster(yearData);
+        } else {
+          // Handle the case where the data for the selected year is missing or not in the expected format.
+          // For example, you might set default values for cluster data.
+          setDataCluster([]);
+          console.log("Data not available for the selected year.");
+        }
+      });
+    } catch (error) {
+      // Handle any potential errors that might occur during data retrieval.
+      console.error("Error fetching data:", error);
+    }
+
+    // Note: dataCluster here might log 'undefined' if the data is not available yet or if there are potential issues in the asynchronous data retrieval.
     console.log(dataCluster);
   };
 
@@ -117,15 +189,15 @@ const MainUser = () => {
             <div className="grid grid-cols-3 gap-3 mt-4">
               <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#F9E9E8]">
                 <h6 className="text-center ">Cluster Tinggi</h6>
-                <p className="text-2xl ">159</p>
+                <p className="text-2xl ">{cluster0Count}</p>
               </div>
               <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#FBF2EA]">
                 <h6 className="text-center">Cluster Sedang</h6>
-                <p className="text-2xl ">159</p>
+                <p className="text-2xl ">{cluster1Count}</p>
               </div>
               <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#E7F6EE]">
                 <h6 className="text-center">Cluster Rendah</h6>
-                <p className="text-2xl ">159</p>
+                <p className="text-2xl ">{cluster2Count}</p>
               </div>
             </div>
           </div>
