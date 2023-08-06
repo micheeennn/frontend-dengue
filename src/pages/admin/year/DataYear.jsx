@@ -32,6 +32,7 @@ const DataYear = () => {
   useEffect(() => {
     fetchDataYear(selectedYear);
     fetchDataCluster(selectedYear);
+    console.log(dataTerm);
   }, [selectedYear]);
 
   useEffect(() => {
@@ -294,7 +295,13 @@ const DataYear = () => {
                 </tbody>
               </table>
             </div>
-            <AddYear pushData={pushData} setOpenAddYear={setOpenAddYear} />
+            {dataTerm.length > 11 ? null : (
+              <AddYear
+                pushData={pushData}
+                setOpenAddYear={setOpenAddYear}
+                data={dataTerm}
+              />
+            )}
           </div>
         </>
       )}

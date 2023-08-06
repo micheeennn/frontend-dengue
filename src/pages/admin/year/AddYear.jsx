@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { app } from "../../../config";
-import { uid } from "uid";
-import { set, ref, getDatabase, onValue } from "firebase/database";
-import ToastError from "../../../components/toast/ToastError";
+import { ref, onValue } from "firebase/database";
 import { db } from "../../../config";
 
-const AddYear = ({ setOpenAddYear, pushData }) => {
+const AddYear = ({ setOpenAddYear, pushData, data }) => {
   const [dataDistrict, setDataDistrict] = useState([]);
   const [item, setItem] = useState({
-    id: 0,
     district: "",
     cases: 0,
     rainfall: 0,
@@ -44,6 +40,7 @@ const AddYear = ({ setOpenAddYear, pushData }) => {
         });
 
         setDataDistrict(data);
+        console.log(data);
         if (data.length > 0) {
           setItem((prevItem) => ({
             ...prevItem,
@@ -69,16 +66,40 @@ const AddYear = ({ setOpenAddYear, pushData }) => {
     }));
   };
 
-  const pushToArray = (e) => {
+  const pushToArray = async (e) => {
     e.preventDefault();
-    pushData(item);
-    setId((prevId) => prevId + 1);
-    setItem((prevItem) => ({ ...prevItem, id }));
-    setItem({
-      cases: 0,
-      rainfall: 0,
-      population: 0,
-    });
+
+    // Check if the district already exists in the dataDistrict array
+    const districtExists = data.some(
+      (_item) => _item.district === item.district
+    );
+
+    console.log(districtExists);
+    if (districtExists) {
+      setId((prevId) => prevId + 1);
+      setItem((prevItem) => ({
+        ...prevItem,
+        district: dataDistrict[id].value.subdistrict,
+        cases: 0,
+        rainfall: 0,
+        population: 0,
+      }));
+    } else {
+      try {
+        await pushData(item);
+        setItem((prevItem) => ({
+          ...prevItem,
+          district: dataDistrict[id].value.subdistrict,
+          cases: 0,
+          rainfall: 0,
+          population: 0,
+        }));
+        setId((prevId) => prevId + 1); // Increment the id state by 1 after pushing data
+      } catch (error) {
+        // Handle any errors that might occur during data processing or submission.
+        console.error("Error pushing data:", error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -116,18 +137,13 @@ const AddYear = ({ setOpenAddYear, pushData }) => {
               <label htmlFor="" className="label">
                 Kecamatan
               </label>
-              <select
+              <input
+                type="text"
                 name="district"
                 value={item.district}
                 onChange={handleChange}
                 className="w-full input input-bordered"
-              >
-                {dataDistrict.map((item, index) => (
-                  <option key={index + 1} value={item.value.subdistrict}>
-                    {item.value.subdistrict}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
             <div>
               <label htmlFor="" className="label">
