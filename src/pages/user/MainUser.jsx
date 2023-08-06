@@ -198,7 +198,7 @@ const MainUser = () => {
                 <div className="grid grid-cols-3 gap-3 mt-4">
                   <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#F9E9E8]">
                     <h6 className="text-center ">Cluster Tinggi</h6>
-                    <p className="text-2xl ">{cluster0Count}</p>
+                    <p className="text-2xl ">{cluster2Count}</p>
                   </div>
                   <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#FBF2EA]">
                     <h6 className="text-center">Cluster Sedang</h6>
@@ -206,7 +206,7 @@ const MainUser = () => {
                   </div>
                   <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#E7F6EE]">
                     <h6 className="text-center">Cluster Rendah</h6>
-                    <p className="text-2xl ">{cluster2Count}</p>
+                    <p className="text-2xl "> {cluster0Count}</p>
                   </div>
                 </div>
               </div>

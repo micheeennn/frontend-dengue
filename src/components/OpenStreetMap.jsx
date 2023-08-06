@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 const OpenStreetMap = ({ dataCluster }) => {
   const [combinedData, setCombinedData] = useState([]);
   const center = [1.5409856, 124.7020854];
-  const clusterColors = ["#C51F1A", "#D27C2C", "#0FA958"];
+  const clusterColors = ["#0FA958", "#D27C2C", "#C51F1A"];
 
   useEffect(() => {
     combineDataAndUpdateStatesData(dataCluster);

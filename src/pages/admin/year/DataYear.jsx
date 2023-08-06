@@ -12,7 +12,7 @@ import DeleteYear from "./DeleteYear";
 import EditYear from "./EditYear";
 import { normalizeData } from "../../../utils/normalize";
 import { db } from "../../../config";
-import { uid } from "uid";
+import ToastError from "../../../components/toast/ToastError";
 
 const DataYear = () => {
   // State variables
@@ -28,6 +28,8 @@ const DataYear = () => {
   const [selectedYear, setSelectedYear] = useState(yearly[0]);
   const [year, setYear] = useState("");
   const [dataTerm, setDataTerm] = useState([]);
+  const [openToastError, setOpenToastError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchDataYear(selectedYear);
@@ -35,13 +37,23 @@ const DataYear = () => {
     console.log(dataTerm);
   }, [selectedYear]);
 
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+    if (yearly.includes(selectedYear)) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  };
+
   useEffect(() => {
     // Set the selectedYear to the first year in yearly array if it is empty
     if (yearly.length > 0 && !selectedYear) {
       setSelectedYear(yearly[0]);
     }
   }, [yearly]);
-
+  console.log(yearly);
   useEffect(() => {
     combineData();
   }, [dataYear, dataCluster]);
@@ -77,15 +89,23 @@ const DataYear = () => {
   };
 
   const clustering = async () => {
-    try {
-      const response = await axios.post("http://127.0.0.1:5000/cluster", {
-        data: normalizeData(dataTerm),
-      });
-      handleYearly(dataTerm);
-      handleCluster(response.data.kecamatan_cluster);
-      setDataTerm([]);
-    } catch (error) {
-      console.log(error);
+    if (year === "") {
+      setOpenToastError(true);
+      setTimeout(() => {
+        setOpenToastError(false);
+      }, 2000);
+    } else {
+      try {
+        const response = await axios.post("http://127.0.0.1:5000/cluster", {
+          data: normalizeData(dataTerm),
+        });
+        handleYearly(dataTerm);
+        handleCluster(response.data.kecamatan_cluster);
+        setDataTerm([]);
+        setOpenAddYear(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -166,25 +186,27 @@ const DataYear = () => {
         <>
           {yearly.length === 0 ? null : (
             <>
-              <h3>Data Tahunan</h3>
-              <form>
-                <div className="flex flex-col mt-4 space-y-3">
-                  <select
-                    name="year"
-                    id="year"
-                    className="w-full max-w-xs select select-bordered"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                  >
-                    <option disabled selected>
-                      Tahun
-                    </option>
-                    {yearly.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </select>
-                </div>
-              </form>
+              <div className="w-72">
+                <h3>Data Tahunan</h3>
+                <form>
+                  <div className="flex flex-col mt-4 space-y-3">
+                    <select
+                      name="year"
+                      id="year"
+                      className="w-full max-w-xs select select-bordered"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                    >
+                      <option disabled selected>
+                        Tahun
+                      </option>
+                      {yearly.map((item) => (
+                        <option value={item}>{item}</option>
+                      ))}
+                    </select>
+                  </div>
+                </form>
+              </div>
             </>
           )}
           <div className="flex items-center justify-end">
@@ -250,24 +272,28 @@ const DataYear = () => {
       {openAddYear && (
         <>
           <div>
-            <div>
+            <div className="w-48">
               <label htmlFor="" className="label">
                 Tahun
               </label>
               <input
                 type="text"
                 value={year}
-                onChange={(e) => setYear(e.target.value)}
+                onChange={handleYearChange}
                 className="w-full max-w-[200px] input input-bordered"
               />
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={(e) => clustering()}
-                className="w-full max-w-[200px] btn"
-              >
-                Simpan
-              </button>
+              {isError ? (
+                <p className="mt-3 text-center text-red-700">Tahun Sudah Ada</p>
+              ) : (
+                <div className="mt-6">
+                  <button
+                    onClick={(e) => clustering()}
+                    className="w-full max-w-[192px] btn"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex space-x-4">
@@ -295,7 +321,7 @@ const DataYear = () => {
                 </tbody>
               </table>
             </div>
-            {dataTerm.length > 11 ? null : (
+            {dataTerm.length > 10 ? null : (
               <AddYear
                 pushData={pushData}
                 setOpenAddYear={setOpenAddYear}
@@ -305,6 +331,7 @@ const DataYear = () => {
           </div>
         </>
       )}
+      {openToastError && <ToastError message="Silahkan isi tahun" />}
       {openDeleteYear && (
         <DeleteYear
           selectedYear={selectedYear}

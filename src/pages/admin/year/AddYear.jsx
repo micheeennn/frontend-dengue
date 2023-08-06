@@ -94,7 +94,10 @@ const AddYear = ({ setOpenAddYear, pushData, data }) => {
           rainfall: 0,
           population: 0,
         }));
-        setId((prevId) => prevId + 1); // Increment the id state by 1 after pushing data
+        setId((prevId) => prevId + 1);
+        if (id > 10) {
+          return;
+        }
       } catch (error) {
         // Handle any errors that might occur during data processing or submission.
         console.error("Error pushing data:", error);
