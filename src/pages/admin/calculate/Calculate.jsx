@@ -59,6 +59,7 @@ const Calculate = () => {
         data: normalizeData(data),
       });
       setResult(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -184,7 +185,7 @@ const Calculate = () => {
               <div className="container p-4 mx-auto">
                 <div>
                   <h5 className="mb-4 text-xl font-bold">Jumlah Cluster</h5>
-                  <h5>{result?.num_clusters}</h5>
+                  <p>{result?.num_clusters}</p>
                 </div>
                 <h5 className="mb-4 text-xl font-bold">Pusat Kluster</h5>
                 <table className="w-full table-auto">
@@ -238,6 +239,11 @@ const Calculate = () => {
               </div>
             </>
           )}
+
+          <div>
+            <h5 className="mb-4 text-xl font-bold">Silhouette Score</h5>
+            <p>{result?.silhouette_avg}</p>
+          </div>
         </>
       )}
     </div>
