@@ -84,31 +84,34 @@ const Calculate = () => {
 
   return (
     <div>
-      <form>
-        <div className="flex flex-col space-y-3">
-          <label htmlFor="year" className="">
-            Tahun
-          </label>
-          <select
-            name="year"
-            id="year"
-            className="w-full max-w-xs select select-bordered"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            <option disabled selected>
-              Tahun
-            </option>
-            {yearly.map((item) => (
-              <option value={item}>{item}</option>
-            ))}
-          </select>
-        </div>
-      </form>
-
+      {yearly.length === 0 ? null : (
+        <>
+          <form>
+            <div className="flex flex-col space-y-3">
+              <label htmlFor="year" className="">
+                Tahun
+              </label>
+              <select
+                name="year"
+                id="year"
+                className="w-full max-w-xs select select-bordered"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                <option disabled selected>
+                  Tahun
+                </option>
+                {yearly.map((item) => (
+                  <option value={item}>{item}</option>
+                ))}
+              </select>
+            </div>
+          </form>
+        </>
+      )}
       {data.length === 0 ? (
         <>
-          <p className="text-center mt-9">Tidak ada data</p>
+          <p className="p-4 text-center border-2 mt-9">Tidak ada data</p>
         </>
       ) : (
         <>

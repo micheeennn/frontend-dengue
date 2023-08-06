@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ref, onValue, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { db } from "../../../config";
 import {
   Chart as ChartJS,
@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import Loading from "../../../components/loading/Loading";
 
 ChartJS.register(
   CategoryScale,
@@ -127,51 +128,106 @@ const Home = () => {
   }, []);
   return (
     <>
-      <div className="flex justify-between my-4">
-        <h3>Selamat Datang</h3>
-        <div>
-          <form>
-            <div className="flex flex-col space-y-3">
-              <label htmlFor="year" className="">
-                Tahun
-              </label>
-              <select
-                name="year"
-                id="year"
-                className="w-full max-w-[200px] select select-bordered"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-              >
-                <option disabled selected>
-                  Tahun
-                </option>
-                {yearly.map((item) => (
-                  <option value={item}>{item}</option>
-                ))}
-              </select>
+      {dataYearly.length === 0 ? (
+        <>
+          <div className="flex flex-col items-center justify-center h-screen">
+            <Loading />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex justify-between my-4">
+            <h3>Selamat Datang</h3>
+            <div>
+              <form>
+                <div className="flex flex-col space-y-3">
+                  <label htmlFor="year" className="">
+                    Tahun
+                  </label>
+                  <select
+                    name="year"
+                    id="year"
+                    className="w-full max-w-[200px] select select-bordered"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                  >
+                    <option disabled selected>
+                      Tahun
+                    </option>
+                    {yearly.map((item) => (
+                      <option value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
-      <div className="grid gap-4">
-        <div className="p-4 border-2 h-[400px] flex justify-center">
-          <Bar options={options} data={data} />
-        </div>
-        <div className="grid grid-cols-2">
-          <div className="p-4 shadow-md">
-            <h5 className="text-center">Jumlah Kasus DBD</h5>
-            <p className="text-center">{totalCases}</p>
           </div>
-          <div className="p-4 shadow-md">
-            <h5 className="text-center">Variabel Pendukung </h5>
-            <ul className="text-center">
-              <li>Curah Hujan</li>
-              <li>Kepadatan Penduduk</li>
-              <li>Kasus DBD</li>
-            </ul>
+          <div className="grid gap-4">
+            <div className="p-4 border-2 h-[400px] flex justify-center">
+              <Bar options={options} data={data} />
+            </div>
+            <div className="grid grid-cols-2">
+              <div className="p-4 shadow-md">
+                <h5 className="text-center">Jumlah Kasus DBD</h5>
+                <p className="text-center">{totalCases}</p>
+              </div>
+              <div className="p-4 shadow-md">
+                <h5 className="text-center">Variabel Pendukung </h5>
+                <ul className="text-center">
+                  <li>Curah Hujan</li>
+                  <li>Kepadatan Penduduk</li>
+                  <li>Kasus DBD</li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          <div className="flex justify-between my-4">
+            <h3>Selamat Datang</h3>
+            <div>
+              <form>
+                <div className="flex flex-col space-y-3">
+                  <label htmlFor="year" className="">
+                    Tahun
+                  </label>
+                  <select
+                    name="year"
+                    id="year"
+                    className="w-full max-w-[200px] select select-bordered"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                  >
+                    <option disabled selected>
+                      Tahun
+                    </option>
+                    {yearly.map((item) => (
+                      <option value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="grid gap-4">
+            <div className="p-4 border-2 h-[400px] flex justify-center">
+              <Bar options={options} data={data} />
+            </div>
+            <div className="grid grid-cols-2">
+              <div className="p-4 shadow-md">
+                <h5 className="text-center">Jumlah Kasus DBD</h5>
+                <p className="text-center">{totalCases}</p>
+              </div>
+              <div className="p-4 shadow-md">
+                <h5 className="text-center">Variabel Pendukung </h5>
+                <ul className="text-center">
+                  <li>Curah Hujan</li>
+                  <li>Kepadatan Penduduk</li>
+                  <li>Kasus DBD</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

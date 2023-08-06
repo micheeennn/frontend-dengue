@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getDatabase, ref, onValue } from "firebase/database";
-import {
-  AiOutlinePlusCircle,
-  AiOutlineDelete,
-  AiOutlineEdit,
-} from "react-icons/ai";
 import { app } from "../../../config";
-import DeleteSubdistrict from "./DeleteSubdistrict";
-import EditSubdistrict from "./EditSubdistrict";
-import AddSubdistrict from "./AddSubdistrict";
-import { MdDelete } from "react-icons/md";
+import Loading from "../../../components/loading/Loading";
 
 const db = getDatabase(app);
 const DataSubdistrict = () => {
   const [dataSubdistrict, setDataSubdistrict] = useState([]);
-  const [selectedSubdistrict, setSelectedSubdistrict] = useState({});
-  const [openAddSubdistrict, setOpenAddSubsdistrict] = useState(false);
-  const [openDeleteSubdistrict, setOpenDeleteSubdistrict] = useState(false);
-  const [openEditSubdistrict, setOpenEditSubdistrict] = useState(false);
-
   const fetchData = () => {
     const criteriaRef = ref(db, "subdistrict");
     onValue(criteriaRef, (snapshot) => {
@@ -56,7 +43,10 @@ const DataSubdistrict = () => {
     <>
       {dataSubdistrict.length === 0 ? (
         <>
-          <p className="text-center">Tidak ada data</p>
+          <div className="flex flex-col items-center justify-center">
+            <Loading />
+            <p className="text-center">Tidak ada data</p>
+          </div>
         </>
       ) : (
         <>

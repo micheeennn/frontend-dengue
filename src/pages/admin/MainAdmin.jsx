@@ -131,49 +131,47 @@ const MainAdmin = () => {
           </Routes>
         </div>
       </div>
-      <div
-        id="modalLogout"
-        tabIndex="-1"
-        aria-hidden="true"
-        className={`flex items-center fixed top-0 left-0 right-0 z-50 ${
-          openModalLogout ? "block" : "hidden"
-        } w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full`}
-      >
-        <div className="relative flex items-center justify-center w-full h-max">
-          <div className="relative bg-white rounded-lg shadow w-80 ">
-            <div className="flex items-start justify-center p-4 rounded-t">
-              <h3 className="text-xl font-semibold text-center text-gray-900 ">
-                Keluar
-              </h3>
-            </div>
 
-            <div className="p-2 space-y-6">
-              <p className="text-base leading-relaxed text-center text-gray-500 ">
-                Anda yakin ingin keluar?
-              </p>
-            </div>
+      {openModalLogout && (
+        <>
+          <div className="modal" open>
+            <form method="dialog" className="modal-box">
+              <div className="">
+                <div className="flex items-start justify-center p-4 rounded-t">
+                  <h3 className="text-xl font-semibold text-center text-gray-900 ">
+                    Keluar
+                  </h3>
+                </div>
 
-            <div className="flex items-center justify-center p-4 space-x-2 border-gray-200 rounded-b">
-              <button
-                data-modal-hide="defaultModal"
-                type="button"
-                className="w-24 btn btn-primary"
-                onClick={() => logout()}
-              >
-                Ya
-              </button>
-              <button
-                data-modal-hide="defaultModal"
-                type="button"
-                onClick={() => setOpenModalLogout(false)}
-                className="w-24 btn btn-warning"
-              >
-                Tidak
-              </button>
-            </div>
+                <div className="p-2 space-y-6">
+                  <p className="text-base leading-relaxed text-center text-gray-500 ">
+                    Anda yakin ingin keluar?
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center p-4 space-x-2 border-gray-200 rounded-b">
+                  <button
+                    data-modal-hide="defaultModal"
+                    type="button"
+                    className="w-24 btn btn-primary"
+                    onClick={() => logout()}
+                  >
+                    Ya
+                  </button>
+                  <button
+                    data-modal-hide="defaultModal"
+                    type="button"
+                    onClick={() => setOpenModalLogout(false)}
+                    className="w-24 btn "
+                  >
+                    Tidak
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

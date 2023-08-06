@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Polygon } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, FeatureGroup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "../utils/data";
 import React, { useState, useEffect } from "react";
@@ -6,20 +6,7 @@ import React, { useState, useEffect } from "react";
 const OpenStreetMap = ({ dataCluster }) => {
   const [combinedData, setCombinedData] = useState([]);
   const center = [1.5409856, 124.7020854];
-  const clusterColors = ["#0FA958", "#D27C2C", "#C51F1A"];
-  const cluster = [
-    { Cluster: 1, district: "Bunaken" },
-    { Cluster: 2, district: "Bunaken Kepulauan" },
-    { Cluster: 0, district: "Malalayang" },
-    { Cluster: 1, district: "Mapanget" },
-    { Cluster: 2, district: "Paal 2" },
-    { Cluster: 0, district: "Sario" },
-    { Cluster: 1, district: "Singkil" },
-    { Cluster: 2, district: "Tikala" },
-    { Cluster: 0, district: "Tuminting" },
-    { Cluster: 1, district: "Wanea" },
-    { Cluster: 2, district: "Wenang" },
-  ];
+  const clusterColors = ["#C51F1A", "#D27C2C", "#0FA958"];
 
   useEffect(() => {
     combineDataAndUpdateStatesData(dataCluster);

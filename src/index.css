@@ -11,7 +11,7 @@
 }
 
 .btn-primary {
-  @apply text-white bg-[#962929] hover:bg-white border-black;
+  @apply text-white bg-[#962929] hover:bg-white hover:text-[#962929] hover:border-[#962929] hover:border-2 border-black;
 }
 
 .box_shadow {

@@ -25,26 +25,25 @@ const DataYear = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(11);
   const [yearly, setYearly] = useState([]);
-  const [selectedYear, setSelectedYear] = useState("");
-  const [data, setData] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(yearly[0]);
   const [year, setYear] = useState("");
   const [dataTerm, setDataTerm] = useState([]);
 
-  // Fetch data on component mount
   useEffect(() => {
-    fetchDataYear();
-  }, []);
-
-  useEffect(() => {
-    // Fetch initial data
     fetchDataYear(selectedYear);
     fetchDataCluster(selectedYear);
+  }, [selectedYear]);
+
+  useEffect(() => {
     // Set the selectedYear to the first year in yearly array if it is empty
     if (yearly.length > 0 && !selectedYear) {
       setSelectedYear(yearly[0]);
     }
+  }, [yearly]);
+
+  useEffect(() => {
     combineData();
-  }, [selectedYear]);
+  }, [dataYear, dataCluster]);
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -83,14 +82,14 @@ const DataYear = () => {
       });
       handleYearly(dataTerm);
       handleCluster(response.data.kecamatan_cluster);
-      setData([]);
+      setDataTerm([]);
     } catch (error) {
       console.log(error);
     }
   };
 
   // Data fetching functions
-  const fetchDataYear = () => {
+  const fetchDataYear = (selectedYear) => {
     try {
       const Ref = ref(db, "yearly");
       onValue(Ref, (snapshot) => {
@@ -105,7 +104,7 @@ const DataYear = () => {
 
         if (selectedYear && data[selectedYear] && data[selectedYear].data) {
           const yearData = data[selectedYear].data;
-          setData(yearData);
+          setDataYear(yearData);
         } else {
           console.log("Data not available for the selected year.");
         }
@@ -115,7 +114,7 @@ const DataYear = () => {
     }
   };
 
-  const fetchDataCluster = () => {
+  const fetchDataCluster = (selectedYear) => {
     try {
       const Ref = ref(db, "cluster");
       onValue(Ref, (snapshot) => {
@@ -140,7 +139,7 @@ const DataYear = () => {
   // Combine Data
   const combineData = () => {
     const newData = dataCluster.map((clusterData) => {
-      const matchingDistrictData = data.find(
+      const matchingDistrictData = dataYear.find(
         (districtData) => districtData.district === clusterData.district
       );
 
@@ -164,25 +163,29 @@ const DataYear = () => {
     <>
       {!openAddYear && (
         <>
-          <h3>Data Tahunan</h3>
-          <form>
-            <div className="flex flex-col space-y-3">
-              <select
-                name="year"
-                id="year"
-                className="w-full max-w-xs select select-bordered"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-              >
-                <option disabled selected>
-                  Tahun
-                </option>
-                {yearly.map((item) => (
-                  <option value={item}>{item}</option>
-                ))}
-              </select>
-            </div>
-          </form>
+          {yearly.length === 0 ? null : (
+            <>
+              <h3>Data Tahunan</h3>
+              <form>
+                <div className="flex flex-col mt-4 space-y-3">
+                  <select
+                    name="year"
+                    id="year"
+                    className="w-full max-w-xs select select-bordered"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                  >
+                    <option disabled selected>
+                      Tahun
+                    </option>
+                    {yearly.map((item) => (
+                      <option value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+              </form>
+            </>
+          )}
           <div className="flex items-center justify-end">
             <button className="btn" onClick={() => setOpenAddYear(true)}>
               <AiOutlinePlusCircle className="icon" />
@@ -190,7 +193,7 @@ const DataYear = () => {
           </div>
           {combinedData.length === 0 ? (
             <>
-              <p className="text-center">Tidak ada data</p>
+              <p className="p-4 mt-4 text-center border-2">Tidak ada data</p>
             </>
           ) : (
             <>
