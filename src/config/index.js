@@ -1,19 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCs9uliRz0v6x-fd5G9xlIwHEyb3FeCLLo",
-  authDomain: "dengue-a246d.firebaseapp.com",
-  databaseURL: "https://dengue-a246d-default-rtdb.firebaseio.com",
-  projectId: "dengue-a246d",
-  storageBucket: "dengue-a246d.appspot.com",
-  messagingSenderId: "545129573288",
-  appId: "1:545129573288:web:5159264e9feb04035d8b9d",
-  measurementId: "G-V2K77GF8EF",
+  apiKey: "AIzaSyBBgwrRwPwyAuckgA45idE11CH6jsFCZhI",
+  authDomain: "dengue-478f6.firebaseapp.com",
+  databaseURL: "https://dengue-478f6-default-rtdb.firebaseio.com",
+  projectId: "dengue-478f6",
+  storageBucket: "dengue-478f6.appspot.com",
+  messagingSenderId: "583624630497",
+  appId: "1:583624630497:web:2408f672c98a05706497a0",
+  measurementId: "G-HZ6XMSEDMF",
 };
-
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);

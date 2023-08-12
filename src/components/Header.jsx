@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import IconManado from "../assets/ic_manado.png";
 import IconBaktiHusada from "../assets/ic_bakti_husada.png";
 import { MdInfoOutline } from "react-icons/md";
+import ModalUserGuide from "./modal/ModalUserGuide";
+import { Route, Routes } from "react-router-dom";
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <div
@@ -21,10 +24,24 @@ const Header = () => {
             </h2>
           </div>
         </div>
-        <div className="text-white">
-          <MdInfoOutline size={35} />
-        </div>
+        {
+          <Routes>
+            <Route
+              path="home"
+              element={
+                <div className="text-white">
+                  <MdInfoOutline
+                    size={35}
+                    onClick={(e) => setOpen(true)}
+                    className="cursor-pointer"
+                  />
+                </div>
+              }
+            />
+          </Routes>
+        }
       </div>
+      {open && <ModalUserGuide setOpen={setOpen} />}
     </>
   );
 };

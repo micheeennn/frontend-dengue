@@ -160,58 +160,49 @@ const MainUser = () => {
               </ul>
             </div>
           </div>
-          {dataYearly.length === 0 ? (
-            <>
-              <div className="flex flex-col items-center justify-center border-2 h-1/2">
-                <Loading />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="px-4 py-8 bg-white border-2 border-black h-1/2 ">
-                <form>
-                  <div className="flex flex-col space-y-3">
-                    <label htmlFor="year" className="">
-                      Tahun
-                    </label>
-                    <select
-                      name="year"
-                      id="year"
-                      className="w-full max-w-[200px] select select-bordered"
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(e.target.value)}
-                    >
-                      <option disabled selected>
-                        Tahun
-                      </option>
-                      {yearly.map((item) => (
-                        <option value={item}>{item}</option>
-                      ))}
-                    </select>
-                  </div>
-                </form>
 
-                <div className="p-6 mt-4 font-semibold border-2 border-black rounded-xl">
-                  <h5 className="text-center ">Jumlah Kasus</h5>
-                  <p className="text-4xl text-center">{totalCases}</p>
-                </div>
-                <div className="grid grid-cols-3 gap-3 mt-4">
-                  <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#F9E9E8]">
-                    <h6 className="text-center ">Cluster Tinggi</h6>
-                    <p className="text-2xl ">{cluster2Count}</p>
-                  </div>
-                  <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#FBF2EA]">
-                    <h6 className="text-center">Cluster Sedang</h6>
-                    <p className="text-2xl ">{cluster1Count}</p>
-                  </div>
-                  <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#E7F6EE]">
-                    <h6 className="text-center">Cluster Rendah</h6>
-                    <p className="text-2xl "> {cluster0Count}</p>
-                  </div>
-                </div>
+          <div className="px-4 py-8 bg-white border-2 border-black h-1/2 ">
+            <form>
+              <div className="flex flex-col space-y-3">
+                <label htmlFor="year" className="">
+                  Tahun
+                </label>
+                <select
+                  name="year"
+                  id="year"
+                  className="w-full max-w-[200px] select select-bordered"
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                >
+                  <option disabled selected>
+                    Tahun
+                  </option>
+                  {yearly.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
               </div>
-            </>
-          )}
+            </form>
+
+            <div className="p-6 mt-4 font-semibold border-2 border-black rounded-xl">
+              <h5 className="text-center ">Jumlah Kasus</h5>
+              <p className="text-4xl text-center">{totalCases}</p>
+            </div>
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#F9E9E8]">
+                <h6 className="text-center ">Cluster Tinggi</h6>
+                <p className="text-2xl ">{cluster2Count}</p>
+              </div>
+              <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#FBF2EA]">
+                <h6 className="text-center">Cluster Sedang</h6>
+                <p className="text-2xl ">{cluster1Count}</p>
+              </div>
+              <div className="p-6 text-center border-2 border-black rounded-xl font-semibold bg-[#E7F6EE]">
+                <h6 className="text-center">Cluster Rendah</h6>
+                <p className="text-2xl "> {cluster0Count}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

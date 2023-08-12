@@ -1,7 +1,7 @@
-import { MapContainer, TileLayer, Polygon, FeatureGroup } from "react-leaflet";
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Polygon, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { statesData } from "../utils/data";
-import React, { useState, useEffect } from "react";
 
 const OpenStreetMap = ({ dataCluster }) => {
   const [combinedData, setCombinedData] = useState([]);
@@ -30,6 +30,8 @@ const OpenStreetMap = ({ dataCluster }) => {
         setCombinedData({ ...statesData, features: updatedFeatures });
       }
     });
+
+    console.log(combinedData);
   };
   return (
     <MapContainer
@@ -54,13 +56,37 @@ const OpenStreetMap = ({ dataCluster }) => {
             key={index}
             pathOptions={{
               fillColor: clusterColor,
-              fillOpacity: 0.7,
+              fillOpacity: 0.2,
               weight: 2,
+              color: "black", // Border color
               opacity: 1,
               dashArray: 3,
             }}
             positions={coordinates}
-          />
+          >
+            <Popup>
+              <div className="p-2">
+                {/* Customize the content of your popup here */}
+                <h3 className="text-lg font-bold text-center">
+                  {state.properties.name}
+                </h3>
+                <table className="table">
+                  <thead className="font-semibold text-base text-[#000]">
+                    <tr>
+                      <th>Kecamatan</th>
+                      <th>Jumlah Kasus</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Bunaken</td>
+                      <td className="text-center">10</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Popup>
+          </Polygon>
         );
       })}
     </MapContainer>
