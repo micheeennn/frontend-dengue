@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { statesData } from "../utils/data";
 
 const OpenStreetMap = ({ dataCluster }) => {
+  console.log(dataCluster);
   const [combinedData, setCombinedData] = useState([]);
   const center = [1.5409856, 124.7020854];
   const clusterColors = ["#0FA958", "#D27C2C", "#C51F1A"];
@@ -11,28 +12,33 @@ const OpenStreetMap = ({ dataCluster }) => {
   useEffect(() => {
     combineDataAndUpdateStatesData(dataCluster);
   }, [dataCluster]);
+
   const combineDataAndUpdateStatesData = (dataArray) => {
     // Assuming initialStatesData is available
 
+    // Create a copy of the original statesData to avoid modifying it directly
+    const updatedStatesData = { ...statesData };
+
     // Combine the dataArray with the initialStatesData.features
-    dataArray.forEach((dataObj) => {
-      const matchedFeatureIndex = statesData.features.findIndex(
-        (feature) =>
-          feature.properties.name.toLowerCase() ===
-          dataObj.district.toLowerCase()
+    updatedStatesData.features.forEach((feature) => {
+      const matchedDataIndex = dataArray.findIndex(
+        (dataObj) =>
+          dataObj.district.toLowerCase() ===
+          feature.properties.name.toLowerCase()
       );
-      if (matchedFeatureIndex !== -1) {
-        const updatedFeatures = [...statesData.features];
-        updatedFeatures[matchedFeatureIndex].properties = {
-          ...updatedFeatures[matchedFeatureIndex].properties,
-          ...dataObj,
+
+      if (matchedDataIndex !== -1) {
+        feature.properties = {
+          ...feature.properties,
+          ...dataArray[matchedDataIndex],
         };
-        setCombinedData({ ...statesData, features: updatedFeatures });
       }
     });
 
+    setCombinedData(updatedStatesData);
     console.log(combinedData);
   };
+
   return (
     <MapContainer
       center={center}
@@ -56,7 +62,7 @@ const OpenStreetMap = ({ dataCluster }) => {
             key={index}
             pathOptions={{
               fillColor: clusterColor,
-              fillOpacity: 0.2,
+              fillOpacity: 0.7,
               weight: 2,
               color: "black", // Border color
               opacity: 1,
@@ -66,24 +72,30 @@ const OpenStreetMap = ({ dataCluster }) => {
           >
             <Popup>
               <div className="p-2">
-                {/* Customize the content of your popup here */}
-                <h3 className="text-lg font-bold text-center">
-                  {state.properties.name}
-                </h3>
-                <table className="table">
-                  <thead className="font-semibold text-base text-[#000]">
-                    <tr>
-                      <th>Kecamatan</th>
-                      <th>Jumlah Kasus</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Bunaken</td>
-                      <td className="text-center">10</td>
-                    </tr>
-                  </tbody>
-                </table>
+                {state?.properties?.Values?.[0] ? (
+                  <>
+                    <table className="table">
+                      <thead className="font-semibold text-base text-[#000]">
+                        <tr>
+                          <th>Kecamatan</th>
+                          <th>Jumlah Kasus</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{state?.properties?.name}</td>
+                          <td className="text-center">
+                            {state?.properties?.Values?.[0] || ""}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </>
+                ) : (
+                  <h3 className="text-lg font-bold">
+                    {state?.properties?.name}
+                  </h3>
+                )}
               </div>
             </Popup>
           </Polygon>

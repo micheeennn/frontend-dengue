@@ -53,7 +53,7 @@ const DataYear = () => {
       setSelectedYear(yearly[0]);
     }
   }, [yearly]);
-  console.log(yearly);
+
   useEffect(() => {
     combineData();
   }, [dataYear, dataCluster]);

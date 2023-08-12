@@ -7,8 +7,8 @@ import Loading from "../../components/loading/Loading";
 
 const MainUser = () => {
   const [dataYearly, setDataYearly] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(2020);
   const [yearly, setYearly] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(yearly[0]);
   const [dataCluster, setDataCluster] = useState([]);
   const [totalCases, setTotalCases] = useState(0);
   const [clusterCounts, setClusterCounts] = useState({
@@ -16,6 +16,7 @@ const MainUser = () => {
     cluster1Count: 0,
     cluster2Count: 0,
   });
+  const [combinedData, setCombinedData] = useState([]);
 
   useEffect(() => {
     const calculateClusterCounts = () => {
@@ -117,6 +118,29 @@ const MainUser = () => {
     console.log(dataCluster);
   };
 
+  const combineData = () => {
+    const newData = dataCluster.map((clusterData) => {
+      const matchingDistrictData = dataYearly.find(
+        (districtData) => districtData.district === clusterData.district
+      );
+
+      if (matchingDistrictData) {
+        return {
+          ...clusterData,
+          Values: [
+            matchingDistrictData.cases,
+            matchingDistrictData.rainfall,
+            matchingDistrictData.population,
+          ],
+        };
+      }
+
+      return clusterData;
+    });
+    console.log(newData);
+    setCombinedData(newData);
+  };
+
   useEffect(() => {
     // Fetch initial data
     fetchDataYear(selectedYear);
@@ -127,14 +151,16 @@ const MainUser = () => {
     }
   }, [selectedYear]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    combineData();
+  }, [dataYearly, dataCluster]);
 
   return (
     <>
       <Header />
       <div className="flex px-4 pt-8 pb-16">
         <div className="flex-1">
-          <OpenStreetMap dataCluster={dataCluster} />
+          <OpenStreetMap dataCluster={combinedData} />
         </div>
         <div className="w-[400px]">
           <div className="bg-[#F2DEBA] h-1/2 p-8">
