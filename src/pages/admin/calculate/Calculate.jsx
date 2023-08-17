@@ -184,28 +184,28 @@ const Calculate = () => {
             <>
               <div className="container p-4 mx-auto">
                 <div>
-                  <h5 className="mb-4 text-xl font-bold">Jumlah Cluster</h5>
+                  <h5 className="mb-4 text-xl font-bold">Jumlah Klaster</h5>
                   <p>{result?.num_clusters}</p>
                 </div>
-                <h5 className="mb-4 text-xl font-bold">Pusat Kluster</h5>
+                <h5 className="mb-4 text-xl font-bold">Pusat Klaster</h5>
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="px-4 py-2">Kluster</th>
+                      <th className="px-4 py-2">Klaster</th>
                       <th className="px-4 py-2">Koordinat</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">Klaster 0</td>
                       <td className="px-4 py-2 border">[0, 0, 0]</td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">Klaster 1</td>
                       <td className="px-4 py-2 border">[0.5, 0.5, 0.5]</td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-2 border">Kluster 1</td>
+                      <td className="px-4 py-2 border">Klaster 2</td>
                       <td className="px-4 py-2 border">[1, 1, 1]</td>
                     </tr>
                   </tbody>
@@ -239,11 +239,11 @@ const Calculate = () => {
               </div>
             </>
           )}
-
+          {/* 
           <div>
             <h5 className="mb-4 text-xl font-bold">Silhouette Score</h5>
             <p>{result?.silhouette_avg}</p>
-          </div>
+          </div> */}
         </>
       )}
     </div>

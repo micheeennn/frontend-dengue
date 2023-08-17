@@ -52,7 +52,7 @@ const MainAdmin = () => {
   }, []);
 
   return (
-    <div className="flex overflow-y-hidden">
+    <div className="flex h-screen overflow-y-hidden">
       <div
         className={`bg-white min-h-screen ${
           open ? "w-72" : "w-16"

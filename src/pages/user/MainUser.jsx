@@ -166,8 +166,9 @@ const MainUser = () => {
           <div className="bg-[#F2DEBA] h-1/2 p-8">
             <h3 className="text-3xl font-bold text-center">LEGENDA</h3>
             <p className="mt-8 font-medium text-justify">
-              Tingkat Keparahan Penyebaran Berdasarkan 4 Variabel Pendukung
-              dalam Analisis Tingkat Penyebaran Dengan Metode K-Means Clustering
+              Pemetaan Penyebaran DBD Berdasarkan 3 Variabel Pendukung Dengan
+              Menggunakan Metode K-Means Clustering Menghasilkan 3 Klaster
+              Tingkat Penyebaran, Yaitu:
             </p>
             <div className="mt-6">
               <ul className="flex flex-col space-y-4">
